@@ -19,8 +19,6 @@ export function REPLInput(props: REPLInputProps) {
     setCommandString("");
   }
 
-  // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
-  // add to it with new commands.
   /**
    * We suggest breaking down this component into smaller components, think about the individual pieces
    * of the REPL and how they connect to each other...
