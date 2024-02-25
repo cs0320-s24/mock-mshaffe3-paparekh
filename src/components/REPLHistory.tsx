@@ -8,6 +8,7 @@ interface REPLHistoryProps {
 export interface historyObject {
   command: String;
   result: String | String[][]; //| Map<string, HTMLTableElement>;
+  needsTable: boolean;
 }
 
 export enum ModeType {
@@ -15,8 +16,17 @@ export enum ModeType {
   verbose,
 }
 
+function buildTable(data: String[][]): HTMLObjectElement {
+  //TODO: turn data into HTML table here!
+}
+
 export function REPLHistory(props: REPLHistoryProps) {
   if (props.mode == "verbose") {
+    for (let i = 0; i < props.history.length; i++) {
+      if (props.history[i].needsTable) {
+        buildTable(props.history[i].result); //TODO type check :')
+      }
+    }
     return (
       <div className="repl-history">
         {props.history.map((output) => (

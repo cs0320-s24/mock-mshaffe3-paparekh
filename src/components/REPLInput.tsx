@@ -25,9 +25,15 @@ export function REPLInput(props: REPLInputProps) {
     } else {
       replout = replFuntion(args);
     }
+    let isArray = true;
+    //TODO: fix typechecking
+    if (replout instanceof String) {
+      isArray = false;
+    }
     let toAdd: historyObject = {
       command: args[0],
       result: replout,
+      needsTable: isArray,
     };
     props.setHistory([...props.history, toAdd]);
     setCommandString("");
