@@ -2,9 +2,14 @@ import { SetStateAction, useState } from "react";
 import "../styles/main.css";
 
 interface REPLHistoryProps {
-  history: string[];
+  history: Array<historyObject>;
   mode: string;
 }
+export interface historyObject {
+  command: String;
+  result: String | String[][]; //| Map<string, HTMLTableElement>;
+}
+
 export enum ModeType {
   brief,
   verbose,
@@ -14,10 +19,10 @@ export function REPLHistory(props: REPLHistoryProps) {
   if (props.mode == "verbose") {
     return (
       <div className="repl-history">
-        {props.history.map((command) => (
+        {props.history.map((output) => (
           <p>
-            Command: {command}
-            Output: {}
+            Command: {output.command}
+            Output: {output.result}
           </p>
         ))}
       </div>

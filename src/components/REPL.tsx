@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../styles/main.css";
-import { REPLHistory } from "./REPLHistory";
+import { REPLHistory, historyObject } from "./REPLHistory";
 import { REPLInput } from "./REPLInput";
 
 /* 
@@ -13,7 +13,7 @@ import { REPLInput } from "./REPLInput";
 */
 
 export default function REPL() {
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<Array<historyObject>>([]);
   return (
     <div className="repl">
       {/*This is where your REPLHistory might go... You also may choose to add it within your REPLInput 

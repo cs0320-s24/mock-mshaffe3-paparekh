@@ -14,7 +14,7 @@ export interface REPLFunction {
   (args: Array<string>): String | String[][];
 }
 
-const command_map = new Map<String, REPLFunction>([
+export const command_map = new Map<String, REPLFunction>([
   ["load", mockLoadCSV],
   ["view", mockViewCSV],
   ["search", mockSearchCSV],
@@ -22,7 +22,6 @@ const command_map = new Map<String, REPLFunction>([
 ]);
 
 export const [mode, setMode] = useState<ModeType>(ModeType.brief);
-
 const [data, setData] = useState<String[][]>([[]]);
 
 let mockFiles = new Map<String, String[][]>([
@@ -30,12 +29,11 @@ let mockFiles = new Map<String, String[][]>([
   ["stardata.csv", midMock.data],
 ]);
 
-// TODO: FIX
 export function mockLoadCSV(args: Array<String>): String {
   let filepath = args[0];
   if (filepath != null) {
-    if (mockFiles.get(filepath) !== undefined) {
-      let clone = mockFiles.get(filepath)!.slice(); //how to avoid undefined error?
+    const clone = mockFiles.get(filepath);
+    if (clone !== undefined) {
       setData(clone);
     }
     return "loaded";
