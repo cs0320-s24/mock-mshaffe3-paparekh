@@ -1,15 +1,14 @@
-import { SetStateAction } from "react";
+import { SetStateAction, useState } from "react";
 import "../styles/main.css";
 
 interface REPLHistoryProps {
   history: string[];
   mode: string;
 }
-
-// export enum ModeType {
-//   brief,
-//   verbose,
-// }
+export enum ModeType {
+  brief,
+  verbose,
+}
 
 export function REPLHistory(props: REPLHistoryProps) {
   if (props.mode == "verbose") {

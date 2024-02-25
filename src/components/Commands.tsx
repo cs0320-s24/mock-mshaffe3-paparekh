@@ -1,6 +1,7 @@
 import { mock } from "node:test";
 import { midMock, smallMock } from "./mockedJson";
 import { Dispatch, SetStateAction, useState } from "react";
+import { ModeType } from "./REPLHistory";
 
 /**
  * A command-processor function for our REPL. The function returns a string, which is the value to print to history when
@@ -13,6 +14,15 @@ export interface REPLFunction {
   (args: Array<string>): String | String[][];
 }
 
+const command_map = new Map<String, REPLFunction>([
+  ["load", mockLoadCSV],
+  ["view", mockViewCSV],
+  ["search", mockSearchCSV],
+  ["mode", changeMode],
+]);
+
+export const [mode, setMode] = useState<ModeType>(ModeType.brief);
+
 const [data, setData] = useState<String[][]>([[]]);
 
 let mockFiles = new Map<String, String[][]>([
@@ -21,10 +31,11 @@ let mockFiles = new Map<String, String[][]>([
 ]);
 
 // TODO: FIX
-export function mockLoadCSV(filepath: string): String {
+export function mockLoadCSV(args: Array<String>): String {
+  let filepath = args[0];
   if (filepath != null) {
     if (mockFiles.get(filepath) !== undefined) {
-      let clone = mockFiles.get("stardata.csv").slice(); //how to avoid undefined error?
+      let clone = mockFiles.get(filepath)!.slice(); //how to avoid undefined error?
       setData(clone);
     }
     return "loaded";
@@ -35,7 +46,7 @@ export function mockLoadCSV(filepath: string): String {
 
 export function mockViewCSV(): String[][] {
   //args should be empty?
-  if(data.length==0){
+  if (data.length == 0) {
     //show error
   }
   return data;
@@ -47,4 +58,15 @@ export function mockSearchCSV(args: Array<string>): String[][] {
     ["The", "song", "remains", "the", "same."],
   ];
   return exampleCSV1;
+}
+
+export function changeMode(args: Array<String>): String {
+  let modeToSet;
+  if (mode == ModeType.brief) {
+    modeToSet = ModeType.verbose;
+  } else {
+    modeToSet = ModeType.brief;
+  }
+  setMode(modeToSet);
+  return "Mode: " + modeToSet;
 }
