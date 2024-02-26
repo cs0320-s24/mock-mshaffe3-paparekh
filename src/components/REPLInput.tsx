@@ -51,13 +51,13 @@ export function REPLInput(props: REPLInputProps) {
     const table = (
       <div>
         <table>
-          <tbody>
-            {data.map((val, key) => (
-              <tr key={key + " "}>
-                <td>{val + " "}</td>
-              </tr>
-            ))}
-          </tbody>
+          {data.map((val, key) => (
+            <tr key={key}>
+              {val.map((elt) => (
+                <td>{elt}</td>
+              ))}
+            </tr>
+          ))}
         </table>
       </div>
     );
@@ -67,7 +67,7 @@ export function REPLInput(props: REPLInputProps) {
   function view(): String[][] {
     //args should be empty?
     if (data.length == 0) {
-      //show error
+      return [["No CSV data"]];
     }
     return data;
   }
