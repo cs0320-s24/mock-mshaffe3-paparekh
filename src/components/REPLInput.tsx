@@ -1,21 +1,104 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
-import { command_map } from "./Commands";
 import { historyObject } from "./REPLHistory";
+//import { mockLoadCSV, mockSearchCSV,mockViewCSV, REPLFunction } from "./Commands";
+import { midMock, smallMock } from "./mockedJson";
+import { table } from "console";
 
 interface REPLInputProps {
   history: Array<historyObject>;
   setHistory: Dispatch<SetStateAction<Array<historyObject>>>;
 }
+
+export interface REPLFunction {
+  (args: Array<string>): String | String[][];
+}
+const mockFiles = new Map<String, String[][]>([
+  ["smallCensus.csv", smallMock.data],
+  ["stardata.csv", midMock.data],
+]);
+
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
 export function REPLInput(props: REPLInputProps) {
-  // Remember: let React manage state in your webapp.
-  // Manages the contents of the input box
+  const [data, setData] = useState<String[][]>([[]]);
+  const command_map = new Map<String, REPLFunction>([
+    ["load", load],
+    ["view", mockViewCSV],
+    ["search", mockSearchCSV],
+    ["mode", changeMode],
+  ]);
+
+  function load(args: Array<String>): String {
+    let filepath = args[1];
+    if (filepath != null) {
+      const clone = mockFiles.get(filepath);
+      if (clone !== undefined) {
+        setData(clone);
+      } else {
+        return "invalid csv name";
+      }
+      return "loaded";
+    } else {
+      return "csv name can't be null";
+    }
+  }
+
+
+  function csvToTable(data:String[][]){
+    const table = (
+    <div>
+      <table>
+                {/* <thead>
+                    <tr>
+                        {heading.map((head, headID) => (
+                            <th key={headID}>{head}</th>
+                        ))}
+                    </tr>
+                </thead> */}
+                <tbody>
+                    {data.map((val, key) => (
+                        <tr key={key}>
+                          <td>{val}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            </div>);
+    return table;
+  }
+
+  function mockViewCSV(): String[][] {
+    //args should be empty?
+    if (data.length == 0) {
+      //show error
+    }
+    return data;
+  }
+
+  function mockSearchCSV(args: Array<string>): String[][] {
+    const exampleCSV1 = [
+      ["1", "2", "3", "4", "5"],
+      ["The", "song", "remains", "the", "same."],
+    ];
+    return exampleCSV1;
+  }
+
+  const [mode, setMode] = useState<string>("brief");
   const [commandString, setCommandString] = useState<string>("");
 
-  //const [count, setCount] = useState<number>(0);
+  function changeMode(): String {
+    let modeToSet;
+    if (mode == "brief") {
+      modeToSet = "verbose";
+    } else {
+      modeToSet = "brief";
+    }
+    setMode(modeToSet);
+    return "Mode: " + modeToSet;
+  }
+
   function handleSubmit() {
     let args = commandString.split(" ");
     let replout;
@@ -25,16 +108,10 @@ export function REPLInput(props: REPLInputProps) {
     } else {
       replout = replFuntion(args);
     }
-    let isArray = true;
-    //TODO: fix typechecking
-    if (replout instanceof String) {
-      isArray = false;
+    let toAdd:historyObject = {
+      command: commandString,
+      result:replout
     }
-    let toAdd: historyObject = {
-      command: args[0],
-      result: replout,
-      needsTable: isArray,
-    };
     props.setHistory([...props.history, toAdd]);
     setCommandString("");
   }
