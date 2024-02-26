@@ -9,6 +9,8 @@ import { table } from "console";
 interface REPLInputProps {
   history: Array<historyObject>;
   setHistory: Dispatch<SetStateAction<Array<historyObject>>>;
+  mode: string;
+  setMode: Dispatch<SetStateAction<string>>;
 }
 
 export interface REPLFunction {
@@ -45,27 +47,27 @@ export function REPLInput(props: REPLInputProps) {
     }
   }
 
-
-  function csvToTable(data:String[][]){
+  function csvToTable(data: String[][]) {
     const table = (
-    <div>
-      <table>
-                {/* <thead>
+      <div>
+        <table>
+          {/* <thead>
                     <tr>
                         {heading.map((head, headID) => (
                             <th key={headID}>{head}</th>
                         ))}
                     </tr>
                 </thead> */}
-                <tbody>
-                    {data.map((val, key) => (
-                        <tr key={key}>
-                          <td>{val}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            </div>);
+          <tbody>
+            {data.map((val, key) => (
+              <tr key={key}>
+                <td>{val}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
     return table;
   }
 
@@ -84,18 +86,16 @@ export function REPLInput(props: REPLInputProps) {
     ];
     return exampleCSV1;
   }
-
-  const [mode, setMode] = useState<string>("brief");
   const [commandString, setCommandString] = useState<string>("");
 
   function changeMode(): String {
     let modeToSet;
-    if (mode == "brief") {
+    if (props.mode == "brief") {
       modeToSet = "verbose";
     } else {
       modeToSet = "brief";
     }
-    setMode(modeToSet);
+    props.setMode(modeToSet);
     return "Mode: " + modeToSet;
   }
 
@@ -108,10 +108,10 @@ export function REPLInput(props: REPLInputProps) {
     } else {
       replout = replFuntion(args);
     }
-    let toAdd:historyObject = {
+    let toAdd: historyObject = {
       command: commandString,
-      result:replout
-    }
+      result: replout,
+    };
     props.setHistory([...props.history, toAdd]);
     setCommandString("");
   }
