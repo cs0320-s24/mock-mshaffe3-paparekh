@@ -14,7 +14,7 @@ interface REPLInputProps {
 }
 
 export interface REPLFunction {
-  (args: Array<string>): String | String[][];
+  (args: Array<string>): String[][];
 }
 const mockFiles = new Map<String, String[][]>([
   ["smallCensus.csv", smallMock.data],
@@ -27,41 +27,34 @@ export function REPLInput(props: REPLInputProps) {
   const [data, setData] = useState<String[][]>([[]]);
   const command_map = new Map<String, REPLFunction>([
     ["load", load],
-    ["view", mockViewCSV],
+    ["view", view],
     ["search", mockSearchCSV],
     ["mode", changeMode],
   ]);
 
-  function load(args: Array<String>): String {
+  function load(args: Array<String>): String[][] {
     let filepath = args[1];
     if (filepath != null) {
       const clone = mockFiles.get(filepath);
       if (clone !== undefined) {
         setData(clone);
       } else {
-        return "invalid csv name";
+        return [["Invalid csv name: " + filepath]];
       }
-      return "loaded";
+      return [["Loaded: " + filepath]];
     } else {
-      return "csv name can't be null";
+      return [["CSV name can't be null"]];
     }
   }
 
-  function csvToTable(data: String[][]) {
+  function csvToTable(data: String[][]): JSX.Element {
     const table = (
       <div>
         <table>
-          {/* <thead>
-                    <tr>
-                        {heading.map((head, headID) => (
-                            <th key={headID}>{head}</th>
-                        ))}
-                    </tr>
-                </thead> */}
           <tbody>
             {data.map((val, key) => (
-              <tr key={key}>
-                <td>{val}</td>
+              <tr key={key + " "}>
+                <td>{val + " "}</td>
               </tr>
             ))}
           </tbody>
@@ -71,7 +64,7 @@ export function REPLInput(props: REPLInputProps) {
     return table;
   }
 
-  function mockViewCSV(): String[][] {
+  function view(): String[][] {
     //args should be empty?
     if (data.length == 0) {
       //show error
@@ -88,7 +81,7 @@ export function REPLInput(props: REPLInputProps) {
   }
   const [commandString, setCommandString] = useState<string>("");
 
-  function changeMode(): String {
+  function changeMode(): String[][] {
     let modeToSet;
     if (props.mode == "brief") {
       modeToSet = "verbose";
@@ -96,7 +89,7 @@ export function REPLInput(props: REPLInputProps) {
       modeToSet = "brief";
     }
     props.setMode(modeToSet);
-    return "Mode: " + modeToSet;
+    return [["Mode: " + modeToSet]];
   }
 
   function handleSubmit() {
@@ -107,6 +100,9 @@ export function REPLInput(props: REPLInputProps) {
       replout = "Bad command.";
     } else {
       replout = replFuntion(args);
+    }
+    if (replout instanceof Array) {
+      replout = csvToTable(replout);
     }
     let toAdd: historyObject = {
       command: commandString,

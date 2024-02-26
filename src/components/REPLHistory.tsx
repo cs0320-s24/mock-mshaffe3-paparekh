@@ -8,7 +8,7 @@ interface REPLHistoryProps {
 }
 export interface historyObject {
   command: String;
-  result: String | String[][];
+  result: string | JSX.Element;
 }
 
 // function buildTable(data: String[][]): HTMLObjectElement {
@@ -19,11 +19,19 @@ export function REPLHistory(props: REPLHistoryProps) {
   if (props.mode == "verbose") {
     return (
       <div className="repl-history">
-        {props.history.map((output) => (
-          <p>
-            Command: {output.command}
-            Output: {output.result}
-          </p>
+        {props.history.map((output, key) => (
+          <table>
+            <tbody>
+              <tr key={key}>
+                <td>{"Command: "}</td>
+                <td>{output.command}</td>
+              </tr>
+              <tr key={key}>
+                <td>{"Output: "}</td>
+                <td>{output.result}</td>
+              </tr>
+            </tbody>
+          </table>
         ))}
       </div>
     );
@@ -31,7 +39,7 @@ export function REPLHistory(props: REPLHistoryProps) {
     return (
       <div className="repl-history">
         {props.history.map((output) => (
-          <p>{output.result}</p>
+          <table>{output.result}</table>
         ))}
       </div>
     );
