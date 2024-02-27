@@ -14,7 +14,7 @@ interface REPLInputProps {
 }
 
 export interface REPLFunction {
-  (args: Array<string>): String[][];
+  (args: Array<string>): String[][] | string;
 }
 const mockFiles = new Map<String, String[][]>([
   ["smallCensus.csv", smallMock.data],
@@ -32,18 +32,18 @@ export function REPLInput(props: REPLInputProps) {
     ["mode", changeMode],
   ]);
 
-  function load(args: Array<String>): String[][] {
+  function load(args: Array<String>): string {
     let filepath = args[1];
     if (filepath != null) {
       const clone = mockFiles.get(filepath);
       if (clone !== undefined) {
         setData(clone);
       } else {
-        return [["Invalid csv name: " + filepath]];
+        return "Invalid csv name: " + filepath;
       }
-      return [["Loaded: " + filepath]];
+      return "Loaded: " + filepath;
     } else {
-      return [["CSV name can't be null"]];
+      return "CSV name can't be null";
     }
   }
 
@@ -81,7 +81,7 @@ export function REPLInput(props: REPLInputProps) {
   }
   const [commandString, setCommandString] = useState<string>("");
 
-  function changeMode(): String[][] {
+  function changeMode(): string {
     let modeToSet;
     if (props.mode == "brief") {
       modeToSet = "verbose";
@@ -89,7 +89,7 @@ export function REPLInput(props: REPLInputProps) {
       modeToSet = "brief";
     }
     props.setMode(modeToSet);
-    return [["Mode: " + modeToSet]];
+    return "Mode: " + modeToSet;
   }
 
   function handleSubmit() {

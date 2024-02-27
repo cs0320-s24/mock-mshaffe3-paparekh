@@ -11,10 +11,6 @@ export interface historyObject {
   result: string | JSX.Element;
 }
 
-// function buildTable(data: String[][]): HTMLObjectElement {
-//   //TODO: turn data into HTML table here!
-// }
-
 export function REPLHistory(props: REPLHistoryProps) {
   if (props.mode == "verbose") {
     return (
