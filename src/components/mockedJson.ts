@@ -236,3 +236,8 @@ export var midMock = {
     ["197", "Christena", "457.63649", "5.05078", "414.22554"],
   ],
 };
+
+export var noHeaders = {
+  response_type: "fileViewSuccess",
+  data: "",
+};

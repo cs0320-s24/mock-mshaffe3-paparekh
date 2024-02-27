@@ -1,17 +1,25 @@
 import { SetStateAction, useState, Dispatch } from "react";
 import "../styles/main.css";
 
+/**
+ * Contains the shared states across the files
+ */
 interface REPLHistoryProps {
   history: Array<historyObject>;
   mode: string;
-  setMode: Dispatch<SetStateAction<string>>;
 }
+
+/**
+ * Models a history element, which contains a command string and the output, which
+ * is either a string or a HTML table
+ */
 export interface historyObject {
   command: String;
   result: string | JSX.Element;
 }
 
 export function REPLHistory(props: REPLHistoryProps) {
+  //verbose mode
   if (props.mode == "verbose") {
     return (
       <div className="repl-history">
@@ -31,7 +39,9 @@ export function REPLHistory(props: REPLHistoryProps) {
         ))}
       </div>
     );
-  } else {
+  }
+  //brief mode
+  else {
     return (
       <div className="repl-history">
         {props.history.map((output) => (
