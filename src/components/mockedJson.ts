@@ -265,12 +265,12 @@ export var noHeaders = {
 
 export var searchSuccessSansIdentify = {
   response_type: "searchResultSuccess",
-  data: [["RI", "White", "' $1,058.47 '", "395773.6521", "$1.00", "75%"]],
-  value_query: "75%",
+  data: [["194", "Lynn", "37.27834", "0.406", "5.56202"]],
+  value_query: "Lynn",
   identifier: null,
 };
 
-export var noResultFound = {
+export var noQuery = {
   value_query: null,
   identifier: null,
   response_type: "searchResultFailure",

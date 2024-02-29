@@ -2,7 +2,18 @@ import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { historyObject } from "./REPLHistory";
-import { midMock, smallMock } from "./mockedJson";
+import {
+  badIndex,
+  invalidHeader,
+  midMock as starMock,
+  noHeaders,
+  noQuery,
+  searchNoHeaders,
+  searchSuccessHeader,
+  searchSuccessIndex,
+  searchSuccessSansIdentify,
+  smallMock as censusMock,
+} from "./mockedJson";
 
 /*
  * This interface describes the props passed into REPLInput, which are the shared states of
@@ -27,8 +38,17 @@ export interface REPLFunction {
  * This maps file names to mock JSON files for front-end testing purposes
  */
 const mockFiles = new Map<String, String[][]>([
-  ["smallCensus.csv", smallMock.data],
-  ["stardata.csv", midMock.data],
+  ["smallCensus.csv", censusMock.data],
+  ["stardata.csv", starMock.data],
+]);
+
+const mockSearchStars = new Map<String[], String[][]>([
+  [[], [[noQuery.failure_reason]]],
+  [["Lynn", "85"], [[badIndex.failure_reason]]],
+  [["Lynn", "Pizza"], [[invalidHeader.failure_reason]]],
+  [["Lynn", "1"], searchSuccessIndex.data],
+  [["Lynn", "Proper Name"], searchSuccessHeader.data],
+  [["Lynn"], searchSuccessSansIdentify.data],
 ]);
 
 export function REPLInput(props: REPLInputProps) {
@@ -107,38 +127,15 @@ export function REPLInput(props: REPLInputProps) {
     if (data.length === 0) {
       return [["No CSV data loaded."]];
     }
-
-    // Remove spaces from the command arguments
-    const columnArg = args.slice(1, -1).join(" ");
-    const value = args.slice(args.length - 1).join(" ");
-
-    let columnIndex: number;
-
-    // Determine if the columnArg is an index or a column name
-    if (!isNaN(parseInt(columnArg))) {
-      columnIndex = parseInt(columnArg);
-    } else {
-      columnIndex = data[0].indexOf(columnArg);
-    }
-
-    if (columnIndex < -1) {
-      return [["Column not found. Make sure to enter a valid column!"]];
-    }
-
-    const results: String[][] = [data[0]];
-
-    for (let i = 1; i < data.length; i++) {
-      // Check if the value is present in the specified column/row
-      if (data[i][columnIndex] === value) {
-        results.push(data[i]);
+    args.shift();
+    if (data === starMock.data) {
+      const result = mockSearchStars.get(args);
+      if (result === undefined) {
+        return [["Invalid search query"]];
       }
+      return result;
     }
-
-    if (results.length === 1) {
-      return [["No matching rows found. Make sure to enter a valid row!"]];
-    }
-
-    return results;
+    return [["Invalid search query"]];
   }
 
   const [commandString, setCommandString] = useState<string>("");
