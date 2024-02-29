@@ -97,7 +97,7 @@ export function REPLInput(props: REPLInputProps) {
     }
     return data;
   }
-  
+
   /**
    * REPLFunction handles the search command, and returns a 2D array of the search results
    * @param args The command string to be parsed and searched through
@@ -108,6 +108,7 @@ export function REPLInput(props: REPLInputProps) {
       return [["No CSV data loaded."]];
     }
 
+    // Remove spaces from the command arguments
     const columnArg = args.slice(1, -1).join(" ");
     const value = args.slice(args.length - 1).join(" ");
 
@@ -127,6 +128,7 @@ export function REPLInput(props: REPLInputProps) {
     const results: String[][] = [data[0]];
 
     for (let i = 1; i < data.length; i++) {
+      // Check if the value is present in the specified column/row
       if (data[i][columnIndex] === value) {
         results.push(data[i]);
       }
