@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c08bf402-6482-4a96-bc8f-05278563a341" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/components/REPLHistory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/REPLHistory.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/REPLInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/REPLInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/mockedJson.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/mockedJson.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/main.css" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="2d38uThYB52zgBRUaUDuW1JTIWW" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/marissashaffer/Desktop/cs/cs32/mock-mshaffe3-paparekh"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c08bf402-6482-4a96-bc8f-05278563a341" name="Changes" comment="" />
+      <created>1709225624848</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1709225624848</updated>
+    </task>
+    <servers />
+  </component>
+</project>

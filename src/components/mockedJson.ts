@@ -239,5 +239,75 @@ export var midMock = {
 
 export var noHeaders = {
   response_type: "fileViewSuccess",
-  data: "",
+  data: [
+    ["RI", "White", "' $1,058.47 '", "395773.6521", "$1.00", "75%"],
+    ["RI", "Black", "$770.26", "30424.80376", "$0.73", "6%"],
+    [
+      "RI",
+      "Native American/American Indian",
+      "$471.07",
+      "2315.505646",
+      "$0.45",
+      "0%",
+    ],
+    [
+      "RI",
+      "Asian-Pacific Islander",
+      "' $1,080.09 '",
+      "18956.71657",
+      "$1.02",
+      "4%",
+    ],
+    ["RI", "Hispanic/Latino", "$673.14", "74596.18851", "$0.64", "14%"],
+    ["RI", "Multiracial", "$971.89", "8883.049171", "$0.92", "2%"],
+  ],
+};
+
+export var searchSuccessSansIdentify = {
+  response_type: "searchResultSuccess",
+  data: [["RI", "White", "' $1,058.47 '", "395773.6521", "$1.00", "75%"]],
+  value_query: "75%",
+  identifier: null,
+};
+
+export var noResultFound = {
+  value_query: null,
+  identifier: null,
+  response_type: "searchResultFailure",
+  failure_reason: "no search query provided",
+};
+
+export var searchSuccessHeader = {
+  response_type: "searchResultSuccess",
+  data: [["194", "Lynn", "37.27834", "0.406", "5.56202"]],
+  value_query: "Lynn",
+  identifier: "Proper Name",
+};
+
+export var searchSuccessIndex = {
+  response_type: "searchResultSuccess",
+  data: [["194", "Lynn", "37.27834", "0.406", "5.56202"]],
+  value_query: "Lynn",
+  identifier: 1,
+};
+
+export var badIndex = {
+  value_query: "Lynn",
+  identifier: 85,
+  response_type: "searchResultFailure",
+  failure_reason: "Column index doesn't exist",
+};
+
+export var searchNoHeaders = {
+  value_query: "Multiracial",
+  identifier: null,
+  response_type: "searchResultSuccess",
+  data: [["RI", "Multiracial", "$971.89", "8883.049171", "$0.92", "2%"]],
+};
+
+export var invalidHeader = {
+  value_query: "Lynn",
+  identifier: "Pizza",
+  response_type: "searchResultFailure",
+  failure_reason: "Header doesn't exist",
 };

@@ -121,7 +121,7 @@ export function REPLInput(props: REPLInputProps) {
       columnIndex = data[0].indexOf(columnArg);
     }
 
-    if (columnIndex === -1) {
+    if (columnIndex < -1) {
       return [["Column not found. Make sure to enter a valid column!"]];
     }
 
