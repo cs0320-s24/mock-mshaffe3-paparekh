@@ -19,6 +19,9 @@
 table {
   border: 1px solid black;
 }
+td {
+  border: 1px solid black;
+}
 .repl-input {
   margin: auto;
   height: 10vh;

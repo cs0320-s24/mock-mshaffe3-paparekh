@@ -281,7 +281,7 @@ export var searchSuccessHeader = {
   response_type: "searchResultSuccess",
   data: [["194", "Lynn", "37.27834", "0.406", "5.56202"]],
   value_query: "Lynn",
-  identifier: "Proper Name",
+  identifier: "ProperName",
 };
 
 export var searchSuccessIndex = {

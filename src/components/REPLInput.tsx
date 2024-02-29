@@ -40,14 +40,18 @@ export interface REPLFunction {
 const mockFiles = new Map<String, String[][]>([
   ["smallCensus.csv", censusMock.data],
   ["stardata.csv", starMock.data],
+  ["noHeadersCensus.csv", noHeaders.data],
 ]);
 
+/**
+ * This won't work because hashcode of array... how can we store the query differently?
+ */
 const mockSearchStars = new Map<String[], String[][]>([
   [[], [[noQuery.failure_reason]]],
   [["Lynn", "85"], [[badIndex.failure_reason]]],
   [["Lynn", "Pizza"], [[invalidHeader.failure_reason]]],
   [["Lynn", "1"], searchSuccessIndex.data],
-  [["Lynn", "Proper Name"], searchSuccessHeader.data],
+  [["Lynn", "ProperName"], searchSuccessHeader.data],
   [["Lynn"], searchSuccessSansIdentify.data],
 ]);
 
@@ -129,13 +133,13 @@ export function REPLInput(props: REPLInputProps) {
     }
     args.shift();
     if (data === starMock.data) {
-      const result = mockSearchStars.get(args);
+      const result = mockSearchStars.get(["Lynn"]);
       if (result === undefined) {
-        return [["Invalid search query"]];
+        return [["Invalid search query: no such mock search" + args]];
       }
       return result;
     }
-    return [["Invalid search query"]];
+    return [["Invalid search query: not correct file"]];
   }
 
   const [commandString, setCommandString] = useState<string>("");
