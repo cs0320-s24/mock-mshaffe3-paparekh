@@ -34,21 +34,16 @@ export interface REPLFunction {
   (args: Array<string>): String[][] | string;
 }
 
+interface query {
+  value: string;
+  identifier: string;
+}
 /*
  * This maps file names to mock JSON files for front-end testing purposes
  */
 const mockFiles = new Map<String, String[][]>([
   ["smallCensus.csv", censusMock.data],
   ["stardata.csv", starMock.data],
-]);
-
-const mockSearchStars = new Map<String[], String[][]>([
-  [[], [[noQuery.failure_reason]]],
-  [["Lynn", "85"], [[badIndex.failure_reason]]],
-  [["Lynn", "Pizza"], [[invalidHeader.failure_reason]]],
-  [["Lynn", "1"], searchSuccessIndex.data],
-  [["Lynn", "Proper Name"], searchSuccessHeader.data],
-  [["Lynn"], searchSuccessSansIdentify.data],
 ]);
 
 export function REPLInput(props: REPLInputProps) {
@@ -60,28 +55,43 @@ export function REPLInput(props: REPLInputProps) {
     ["mode", changeMode],
   ]);
 
-  /**
-   * This REPLFunction handles the "load" command by setting the data variable
-   * to be equal to the mocked data
-   * @param args the command string arguments
-   * @returns Message to be added to REPLHistory
-   */
-  function load(args: Array<String>): string {
-    let filepath = args[1];
-    if (filepath != null) {
-      //try to use mock file map to get data
-      const clone = mockFiles.get(filepath);
-      //if no such filename
-      if (clone !== undefined) {
-        setData(clone);
+  const empty:query = {value: "", identifier:""}
+  const badIndex:query = {value:"Lynn", identifier: "85"}
+  const badHeader:query ={value:"Lynn", identifier:"Pizza"}
+  const successIndex:query = {value: "Lynn", identifier: "1"}
+  const successHeader:query = {value:"Lynn", identifier: "ProperName"}
+  const successNoIdentifier:query ={value:"Lynn", identifier:""}
+
+  const mockSearchStars = new Map<query, String[][]>([
+  [empty, [[noQuery.failure_reason]]],
+  [badIndex, [[invalidIndexFailure.failure_reason]]],
+  [badHeader, [[invalidHeader.failure_reason]]],
+  [successIndex, searchSuccessIndex.data],
+  [successHeader, searchSuccessHeader.data],
+  [successNoIdentifier, searchSuccessSansIdentify.data],
+]);
+    /**
+     * This REPLFunction handles the "load" command by setting the data variable
+     * to be equal to the mocked data
+     * @param args the command string arguments
+     * @returns Message to be added to REPLHistory
+     */
+    function load(args: Array<String>): string {
+      let filepath = args[1];
+      if (filepath != null) {
+        //try to use mock file map to get data
+        const clone = mockFiles.get(filepath);
+        //if no such filename
+        if (clone !== undefined) {
+          setData(clone);
+        } else {
+          return "Invalid csv name: " + filepath;
+        }
+        return "Loaded: " + filepath;
       } else {
-        return "Invalid csv name: " + filepath;
+        return "CSV name can't be null";
       }
-      return "Loaded: " + filepath;
-    } else {
-      return "CSV name can't be null";
-    }
-  }
+    };
 
   /**
    * This helper function turns a 2D array into an HTML table for
