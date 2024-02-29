@@ -97,27 +97,19 @@ export function REPLInput(props: REPLInputProps) {
     }
     return data;
   }
-
+  
   /**
-   * This REPLFunction handles the "search" command, and returns a 2D array of results
+   * REPLFunction handles the search command, and returns a 2D array of the search results
    * @param args The command string to be parsed and searched through
-   * @returns
+   * @returns String[][] representing a successful output or informative error * message
    */
-  function search_2(args: Array<string>): String[][] {
-    const exampleCSV1 = [
-      ["1", "2", "3", "4", "5"],
-      ["The", "song", "remains", "the", "same."],
-    ];
-    return exampleCSV1;
-  }
-
   function search(args: Array<string>): String[][] {
     if (data.length === 0) {
       return [["No CSV data loaded."]];
     }
 
-    const columnArg = args[1];
-    const value = args[2];
+    const columnArg = args.slice(1, -1).join(" ");
+    const value = args.slice(args.length - 1).join(" ");
 
     let columnIndex: number;
 
@@ -129,10 +121,10 @@ export function REPLInput(props: REPLInputProps) {
     }
 
     if (columnIndex === -1) {
-      return [["Column not found."]];
+      return [["Column not found. Make sure to enter a valid column!"]];
     }
 
-    const results: String[][] = [data[0]]; 
+    const results: String[][] = [data[0]];
 
     for (let i = 1; i < data.length; i++) {
       if (data[i][columnIndex] === value) {
@@ -141,7 +133,7 @@ export function REPLInput(props: REPLInputProps) {
     }
 
     if (results.length === 1) {
-      return [["No matching rows found."]];
+      return [["No matching rows found. Make sure to enter a valid row!"]];
     }
 
     return results;
