@@ -103,13 +103,50 @@ export function REPLInput(props: REPLInputProps) {
    * @param args The command string to be parsed and searched through
    * @returns
    */
-  function search(args: Array<string>): String[][] {
+  function search_2(args: Array<string>): String[][] {
     const exampleCSV1 = [
       ["1", "2", "3", "4", "5"],
       ["The", "song", "remains", "the", "same."],
     ];
     return exampleCSV1;
   }
+
+  function search(args: Array<string>): String[][] {
+    if (data.length === 0) {
+      return [["No CSV data loaded."]];
+    }
+
+    const columnArg = args[1];
+    const value = args[2];
+
+    let columnIndex: number;
+
+    // Determine if the columnArg is an index or a column name
+    if (!isNaN(parseInt(columnArg))) {
+      columnIndex = parseInt(columnArg);
+    } else {
+      columnIndex = data[0].indexOf(columnArg);
+    }
+
+    if (columnIndex === -1) {
+      return [["Column not found."]];
+    }
+
+    const results: String[][] = [data[0]]; 
+
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][columnIndex] === value) {
+        results.push(data[i]);
+      }
+    }
+
+    if (results.length === 1) {
+      return [["No matching rows found."]];
+    }
+
+    return results;
+  }
+
   const [commandString, setCommandString] = useState<string>("");
 
   /**
