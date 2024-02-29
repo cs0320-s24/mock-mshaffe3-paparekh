@@ -63,7 +63,7 @@ test("after I click the button, my command gets pushed", async ({ page }) => {
   expect(firstChild).toEqual("Awesome command");
 });
 
-test("on page load, i see a login button", async ({ page }) => {
+test("basic search functionality", async ({ page }) => {
   await page.goto("http://localhost:8002/");
   await expect(page.getByLabel("Login")).toBeVisible();
   await 
