@@ -8,14 +8,19 @@ import { expect, test } from "@playwright/test";
   Look for this pattern in the tests below!
  */
 
-
-test("on page load, i see a login button", async ({ page }) => {
+/**
+ * Test to verify that a login button is visible on page load.
+ */
+test("on page load, I see a login button", async ({ page }) => {
   // Notice: http, not https! Our front-end is not set up for HTTPs.
   await page.goto("http://localhost:8000/");
   await expect(page.getByLabel("Login")).toBeVisible();
 });
 
-test("on page load, i dont see the input box until login", async ({ page }) => {
+/**
+ * Test to verify that input boxes are not visible until login.
+ */
+test("on page load, I dont see the input box until login", async ({ page }) => {
   // Notice: http, not https! Our front-end is not set up for HTTPs.
   await page.goto("http://localhost:8000/");
   await expect(page.getByLabel("Sign Out")).not.toBeVisible();
@@ -27,6 +32,9 @@ test("on page load, i dont see the input box until login", async ({ page }) => {
   await expect(page.getByLabel("Command input")).toBeVisible();
 });
 
+/**
+ * Test to verify that input box text changes after typing.
+ */
 test("after I type into the input box, its text changes", async ({ page }) => {
   // Step 1: Navigate to a URL
   await page.goto("http://localhost:8000/");
@@ -43,25 +51,9 @@ test("after I type into the input box, its text changes", async ({ page }) => {
   await expect(page.getByLabel("Command input")).toHaveValue(mock_input);
 });
 
-test("load command creates an empty result (invalid file)", async ({
-  page,
-}) => {
-  await page.goto("http://localhost:8000/");
-  await page.getByLabel("Login").click();
-  await page.getByLabel("Command input").click();
-  await page.getByLabel("Command input").fill("load invaliddata.csv");
-  await expect(page.getByLabel("Command input")).toHaveValue(
-    "load invaliddata.csv"
-  );
-  // Testing search with ProperName heading
-  await page.getByLabel("Submit").click();
-  await page.getByLabel("Command input").click();
-  await page.getByLabel("Command input").fill("view");
-  await page.getByLabel("Submit").click();
-  const table = page.locator('div[className="repl-history"] table');
-  const rows = table.locator("tbody tr");
-});
-
+/**
+ * Test to verify view functionality for stardata.csv.
+ */
 test("view functionality (table generation) for stardata.csv", async ({
   page,
 }) => {
@@ -82,6 +74,9 @@ test("view functionality (table generation) for stardata.csv", async ({
   await expect(page.getByRole("cell", { name: "Lynn" })).toHaveText("Lynn");
 });
 
+/**
+ * Test to verify view functionality for censusdata.csv.
+ */
 test("view functionality (table generation) for censusdata.csv", async ({
   page,
 }) => {
@@ -111,6 +106,9 @@ test("view functionality (table generation) for censusdata.csv", async ({
   );
 });
 
+/**
+ * Test to verify view functionality for noHeaders.csv.
+ */
 test("view functionality (table generation) for noHeaders.csv", async ({
   page,
 }) => {
@@ -131,6 +129,9 @@ test("view functionality (table generation) for noHeaders.csv", async ({
   await expect(page.getByRole("cell", { name: "0%" })).toHaveText("0%");
 });
 
+/**
+ * Test to verify valid search commands for multiple CSV files.
+ */
 test("valid search commands for stardata.csv, censusdata.csv, noHeaders.csv/loading multiple files at the same time", async ({
   page,
 }) => {
@@ -199,9 +200,10 @@ test("valid search commands for stardata.csv, censusdata.csv, noHeaders.csv/load
   );
 });
 
-test("mode switching to verbose", async ({
-  page,
-}) => {
+/**
+ * Test to verify mode switching to verbose.
+ */
+test("mode switching to verbose", async ({ page }) => {
   // Testing search for stardata.csv
   await page.goto("http://localhost:8006/");
   await page.getByLabel("Login").click();
@@ -220,11 +222,20 @@ test("mode switching to verbose", async ({
     .fill("search ProperName Lynn");
   await page.getByLabel("Submit").click();
 
-  await expect(page.getByRole("cell", { name: "Command" }).first()).toHaveText("Command");
-  await expect(page.getByRole("cell", { name: "Mode changed to verbose" })).toHaveText("Mode changed to verbose");
-  await expect(page.getByRole("cell", { name: "Output" }).nth(2)).toHaveText("Output");
+  await expect(page.getByRole("cell", { name: "Command" }).first()).toHaveText(
+    "Command"
+  );
+  await expect(
+    page.getByRole("cell", { name: "Mode changed to verbose" })
+  ).toHaveText("Mode changed to verbose");
+  await expect(page.getByRole("cell", { name: "Output" }).nth(2)).toHaveText(
+    "Output"
+  );
 });
 
+/**
+ * Test to verify different types of invalid inputs/commands.
+ */
 test("different types of invalid inputs/commands", async ({ page }) => {
   // Testing search for stardata.csv
   await page.goto("http://localhost:8006/");
@@ -232,7 +243,9 @@ test("different types of invalid inputs/commands", async ({ page }) => {
   await page.getByPlaceholder("Enter command here!").click();
   await page.getByPlaceholder("Enter command here!").fill("load wrong.csv");
   await page.getByLabel("Submit").click();
-  await expect(page.getByText("No such filename found")).toHaveText("No such filename found");
+  await expect(page.getByText("No such filename found")).toHaveText(
+    "No such filename found"
+  );
   await page.getByPlaceholder("Enter command here!").fill("viewww");
   await page.getByLabel("Submit").click();
   await expect(page.getByText("Bad command.")).toHaveText("Bad command.");
@@ -265,11 +278,10 @@ test("different types of invalid inputs/commands", async ({ page }) => {
   await expect(
     page.getByRole("cell", { name: "no search query provided" })
   ).toHaveText("no search query provided");
-  await page.getByPlaceholder('Enter command here!').click();
-  await page.getByPlaceholder('Enter command here!').fill('search Pizza Lynn');
-  await page.getByLabel('Submit').click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("search Pizza Lynn");
+  await page.getByLabel("Submit").click();
   await expect(
     page.locator("table").filter({ hasText: "Header doesn't exist" }).first()
   ).toHaveText("Header doesn't exist");
 });
-
