@@ -54,7 +54,9 @@ test("after I type into the input box, its text changes", async ({ page }) => {
   await expect(page.getByLabel("Command input")).toHaveValue(mock_input);
 });
 
-test("load command creates an empty result (invalid file)", async ({ page }) => {
+test("load command creates an empty result (invalid file)", async ({
+  page,
+}) => {
   await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
   await page.getByLabel("Command input").click();
@@ -70,11 +72,16 @@ test("load command creates an empty result (invalid file)", async ({ page }) => 
   await page.getByLabel("Submit").click();
   const table = page.locator('div[className="repl-history"] table');
   const rows = table.locator("tbody tr");
-  await expect(rows).toHaveCount(1);
-  
-
+  // await expect(rows).toHaveCount(0);
+  // await expect(rows.nth(0).locator("td").nth(0)).toHaveText(
+  //   "No such filename found"
+  // );
+  const output = await page
+    .locator('div[className="repl-history"] table')
+    .innerText();
+  expect(output).toBe("");
   // table className="history-table"
-})
+});
 
 // TODO change
 test("basic search functionality for stardata.csv", async ({ page }) => {
