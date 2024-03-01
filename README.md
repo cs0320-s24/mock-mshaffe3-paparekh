@@ -32,6 +32,7 @@ Because the Mock project was concerned with creating front-end components, Playw
 
 For all the tests, various formatted CSVs were used: stardata.csv, censusdata.csv, noHeaders.csv.
 
+
 # How to
 
 Run the tests:
