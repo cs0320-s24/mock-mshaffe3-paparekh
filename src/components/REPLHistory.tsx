@@ -27,11 +27,11 @@ export function REPLHistory(props: REPLHistoryProps) {
           <table id="table">
             <tbody>
               <tr key={key}>
-                <td>{"Command: "}</td>
+                <td>{"Command"}</td>
                 <td>{output.command}</td>
               </tr>
               <tr key={key}>
-                <td>{"Output: "}</td>
+                <td>{"Output"}</td>
                 <td>{output.result}</td>
               </tr>
             </tbody>

@@ -111,17 +111,16 @@ export function REPLInput(props: REPLInputProps) {
    */
   function csvToTable(data: String[][]): JSX.Element {
     let table = (
-      <div>
-        <table>
-          {data.map((val, key) => (
-            <tr key={key}>
-              {val.map((elt) => (
-                <td>{elt}</td>
-              ))}
-            </tr>
-          ))}
-        </table>
-      </div>
+      <table>
+        Results:
+        {data.map((val, key) => (
+          <tr key={key}>
+            {val.map((elt) => (
+              <td>{elt}</td>
+            ))}
+          </tr>
+        ))}
+      </table>
     );
     return table;
   }
@@ -152,18 +151,18 @@ export function REPLInput(props: REPLInputProps) {
         args[1] = "";
       }
       let result: String[][] | undefined;
-      if (data === starMock.data) {
-        queries.forEach((val) => {
-          if (args[0] === val.value && args[1] === val.identifier) {
-            result = mockSearchStars.get(val);
-          }
-        });
-        if (result === undefined) {
-          return "Invalid search query: no such mock search: " + args;
+      //loop through mock searches to see if one of these matches the search
+      queries.forEach((val) => {
+        if (args[0] === val.value && args[1] === val.identifier) {
+          //return corresponding mocked json
+          result = mockSearchStars.get(val);
         }
-        return result;
+      });
+      //if not found
+      if (result === undefined) {
+        return "Invalid search query";
       }
-      return "Invalid search query. Check that a file is loaded.";
+      return result;
     }
   }
 
@@ -183,7 +182,7 @@ export function REPLInput(props: REPLInputProps) {
     }
     //update the shared state
     props.setMode(modeToSet);
-    return "Mode: " + modeToSet;
+    return "Mode changed to " + modeToSet;
   }
 
   /**
