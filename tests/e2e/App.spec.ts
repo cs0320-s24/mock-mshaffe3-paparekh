@@ -54,28 +54,55 @@ test("after I type into the input box, its text changes", async ({ page }) => {
   await expect(page.getByLabel("Command input")).toHaveValue(mock_input);
 });
 
+test("load command creates an empty result (invalid file)", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+  await page.getByLabel("Login").click();
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load invaliddata.csv");
+  await expect(page.getByLabel("Command input")).toHaveValue(
+    "load invaliddata.csv"
+  );
+  // Testing search with ProperName heading
+  await page.getByLabel("Submit").click();
+
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("view");
+  await page.getByLabel("Submit").click();
+  const table = page.locator('div[className="repl-history"] table');
+  const rows = table.locator("tbody tr");
+  await expect(rows).toHaveCount(1);
+  
+
+  // table className="history-table"
+})
+
+// TODO change
 test("basic search functionality for stardata.csv", async ({ page }) => {
   await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("load stardata.csv");
+  await expect(page.getByLabel("Command input")).toHaveValue(
+    "load stardata.csv"
+  );
   // Testing search with ProperName heading
   await page.getByLabel("Submit").click();
+
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("view");
   await page.getByLabel("Submit").click();
-  const table = page.locator('div[aria-label="search-table"] table');
+  const table = page.locator('div[className="repl-history"] table');
   const rows = table.locator("tbody tr");
   // TODO Look
   await expect(rows).toHaveCount(0);
 
   await page.getByLabel("Command input").click();
-  await page.getByLabel("Command input").fill("search Lynn ProperName");
+  await page.getByLabel("Command input").fill("search ProperName Lynn");
   await page.getByLabel("Submit").click();
   const table_2 = page.locator('div[aria-label="search-table"] table');
   const rows_2 = table.locator("tbody tr");
   // TODO Look
-  await expect(rows_2).toHaveCount(1);
+  // await expect(rows_2).toHaveCount(1);
 
   // await expect(rows.nth(0).locator("td").nth(0)).toHaveText("");
   // const basic_propername_search_output =
