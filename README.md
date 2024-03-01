@@ -19,19 +19,21 @@ In terms of data structures, we used several Maps to store the CSV information. 
 After extensively testing the program (both manually and with the Playwright tests), we have found no bugs. Furthermore, there are no checkstyle errors as well.
 
 # Tests
+
 Because the Mock project was concerned with creating front-end components, Playwright tests were used to test the functionality of the program. The test suite checks for not only basic functionality (load, view, and search commands), but also edge cases and the error handling within the program. The following aspects of the program were tested:
-* a login button is visible on page load
-* input boxes are not visible until login
-* input box text changes after typing
-* view functionality for stardata.csv
-* view functionality for censusdata.csv
-* view functionality for noHeaders.csv
-* valid search commands for multiple CSV files/loading files concurrently
-* mode switching to verbose/brief
-* types of invalid inputs/commands for search, load, etc.
+
+- a login button is visible on page load
+- input boxes are not visible until login
+- input box text changes after typing
+- view functionality for stardata.csv
+- view functionality for censusdata.csv
+- view functionality for noHeaders.csv
+- valid search commands for multiple CSV files/loading files concurrently
+- mode switching to verbose/brief
+- types of invalid inputs/commands for search, load, etc.
 
 For all the tests, various formatted CSVs were used: stardata.csv, censusdata.csv, noHeaders.csv.
-
+Additionally, we did not create unit tests due to the nature of the Mock project, which was not designed to be unit testable. Our focus was primarily on developing the front-end, and thus, utilized Playwright tests.
 
 # How to
 
