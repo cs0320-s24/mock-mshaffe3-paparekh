@@ -11,8 +11,11 @@ interface ControlledInputProps {
     ariaLabel: string 
   }
   
-  // Input boxes contain state. We want to make sure React is managing that state,
-  //   so we have a special component that wraps the input box.
+  /**
+   * Input boxes contain state. Making sure React is managing that state
+   * @param param0 - contains input for the HTML element
+   * @returns an HTML element
+   */
   export function ControlledInput({value, setValue, ariaLabel}: ControlledInputProps) {
     return (
       <input type="text" className="repl-command-box"

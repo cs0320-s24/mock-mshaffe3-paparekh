@@ -18,6 +18,11 @@ export interface historyObject {
   result: string | JSX.Element;
 }
 
+/**
+ * Allows for table generation for both the verbose and brief modes
+ * @param props - REPLHistoryProps
+ * @returns HTML table
+ */
 export function REPLHistory(props: REPLHistoryProps) {
   //verbose mode
   if (props.mode == "verbose") {

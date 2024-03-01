@@ -35,6 +35,9 @@ export interface REPLFunction {
   (args: Array<string>): String[][] | string;
 }
 
+/**
+ * Interface representing the query
+ */
 interface query {
   value: string;
   identifier: string;
@@ -48,6 +51,12 @@ const mockFiles = new Map<String, String[][]>([
   ["noHeaders.csv", noHeaders.data],
 ]);
 
+/**
+ * Handles user input in the REPL interface
+ * @param props - The properties required by the component
+ * @returns the rendered input field and submit button in a form of a JSX.
+ * Element
+ */
 export function REPLInput(props: REPLInputProps) {
   const [data, setData] = useState<String[][]>([[]]);
   const command_map = new Map<String, REPLFunction>([
