@@ -24,7 +24,7 @@ export function REPLHistory(props: REPLHistoryProps) {
     return (
       <div className="repl-history">
         {props.history.map((output, key) => (
-          <table id="table">
+          <table className="history-table">
             <tbody>
               <tr key={key}>
                 <td>{"Command"}</td>
@@ -45,7 +45,7 @@ export function REPLHistory(props: REPLHistoryProps) {
     return (
       <div className="repl-history">
         {props.history.map((output) => (
-          <table>{output.result}</table>
+          <table className="history-table">{output.result}</table>
         ))}
       </div>
     );

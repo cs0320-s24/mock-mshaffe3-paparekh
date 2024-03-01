@@ -9,7 +9,7 @@ export var smallMock = {
       "Earnings Disparity",
       "Employed Percent",
     ],
-    ["RI", "White", "' $1,058.47 '", "395773.6521", "$1.00", "75%"],
+    ["RI", "White", "$1,058.47", "395773.6521", "$1.00", "75%"],
     ["RI", "Black", "$770.26", "30424.80376", "$0.73", "6%"],
     [
       "RI",
@@ -19,14 +19,7 @@ export var smallMock = {
       "$0.45",
       "0%",
     ],
-    [
-      "RI",
-      "Asian-Pacific Islander",
-      "' $1,080.09 '",
-      "18956.71657",
-      "$1.02",
-      "4%",
-    ],
+    ["RI", "Asian-Pacific Islander", "$1,080.09", "18956.71657", "$1.02", "4%"],
     ["RI", "Hispanic/Latino", "$673.14", "74596.18851", "$0.64", "14%"],
     ["RI", "Multiracial", "$971.89", "8883.049171", "$0.92", "2%"],
   ],
@@ -240,7 +233,7 @@ export var midMock = {
 export var noHeaders = {
   response_type: "fileViewSuccess",
   data: [
-    ["RI", "White", "' $1,058.47 '", "395773.6521", "$1.00", "75%"],
+    ["RI", "White", "$1,058.47", "395773.6521", "$1.00", "75%"],
     ["RI", "Black", "$770.26", "30424.80376", "$0.73", "6%"],
     [
       "RI",
@@ -250,14 +243,7 @@ export var noHeaders = {
       "$0.45",
       "0%",
     ],
-    [
-      "RI",
-      "Asian-Pacific Islander",
-      "' $1,080.09 '",
-      "18956.71657",
-      "$1.02",
-      "4%",
-    ],
+    ["RI", "Asian-Pacific Islander", "$1,080.09", "18956.71657", "$1.02", "4%"],
     ["RI", "Hispanic/Latino", "$673.14", "74596.18851", "$0.64", "14%"],
     ["RI", "Multiracial", "$971.89", "8883.049171", "$0.92", "2%"],
   ],
@@ -301,6 +287,13 @@ export var invalidIndexFailure = {
 export var searchNoHeaders = {
   value_query: "Multiracial",
   identifier: null,
+  response_type: "searchResultSuccess",
+  data: [["RI", "Multiracial", "$971.89", "8883.049171", "$0.92", "2%"]],
+};
+
+export var searchNoHeadersIndex = {
+  value_query: "Multiracial",
+  identifier: "1",
   response_type: "searchResultSuccess",
   data: [["RI", "Multiracial", "$971.89", "8883.049171", "$0.92", "2%"]],
 };

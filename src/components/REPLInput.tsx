@@ -12,6 +12,7 @@ import {
   searchSuccessHeader,
   searchSuccessIndex,
   searchSuccessSansIdentify,
+  searchNoHeadersIndex,
   smallMock as censusMock,
 } from "./mockedJson";
 
@@ -42,9 +43,9 @@ interface query {
  * This maps file names to mock JSON files for front-end testing purposes
  */
 const mockFiles = new Map<String, String[][]>([
-  ["smallCensus.csv", censusMock.data],
+  ["censusdata.csv", censusMock.data],
   ["stardata.csv", starMock.data],
-  ["noHeadersCensus.csv", noHeaders.data],
+  ["noHeaders.csv", noHeaders.data],
 ]);
 
 export function REPLInput(props: REPLInputProps) {
@@ -56,12 +57,17 @@ export function REPLInput(props: REPLInputProps) {
     ["mode", changeMode],
   ]);
 
-  const empty: query = { value: "", identifier: "" };
+  const empty: query = { value: " ", identifier: " " };
   const badIndex: query = { value: "Lynn", identifier: "85" };
   const badHeader: query = { value: "Lynn", identifier: "Pizza" };
   const successIndex: query = { value: "Lynn", identifier: "1" };
   const successHeader: query = { value: "Lynn", identifier: "ProperName" };
-  const successNoIdentifier: query = { value: "Lynn", identifier: "" };
+  const successNoIdentifier: query = { value: "Lynn", identifier: " " };
+  const successNoHeaders: query = { value: "Multiracial", identifier: " " };
+  const successNoHeadersIndex: query = {
+    value: "Multiracial",
+    identifier: "1",
+  };
 
   const queries: query[] = [
     empty,
@@ -70,15 +76,19 @@ export function REPLInput(props: REPLInputProps) {
     successHeader,
     successIndex,
     successNoIdentifier,
+    successNoHeaders,
+    successNoHeadersIndex,
   ];
 
-  const mockSearchStars = new Map<query, String[][]>([
+  const mockSearches = new Map<query, String[][]>([
     [empty, [[noQuery.failure_reason]]],
     [badIndex, [[invalidIndexFailure.failure_reason]]],
     [badHeader, [[invalidHeader.failure_reason]]],
     [successIndex, searchSuccessIndex.data],
     [successHeader, searchSuccessHeader.data],
     [successNoIdentifier, searchSuccessSansIdentify.data],
+    [successNoHeaders, searchNoHeaders.data],
+    [successNoHeadersIndex, searchNoHeadersIndex.data],
   ]);
   /**
    * This REPLFunction handles the "load" command by setting the data variable
@@ -95,9 +105,9 @@ export function REPLInput(props: REPLInputProps) {
       if (clone !== undefined) {
         setData(clone);
       } else {
-        return "Invalid csv name: " + filepath;
+        return "No such filename found";
       }
-      return "Loaded: " + filepath;
+      return "Loaded " + filepath;
     } else {
       return "CSV name can't be null";
     }
@@ -148,20 +158,23 @@ export function REPLInput(props: REPLInputProps) {
       return "No CSV data loaded.";
     } else {
       args.shift();
-      if (args.length < 2) {
-        args[1] = "";
+      while (args.length < 2) {
+        args.unshift(" ");
       }
       let result: String[][] | undefined;
       //loop through mock searches to see if one of these matches the search
       queries.forEach((val) => {
-        if (args[0] === val.value && args[1] === val.identifier) {
+        if (
+          args[1].toLowerCase() == val.value.toLowerCase() &&
+          args[0].toLowerCase() == val.identifier.toLowerCase()
+        ) {
           //return corresponding mocked json
-          result = mockSearchStars.get(val);
+          result = mockSearches.get(val);
         }
       });
       //if not found
       if (result === undefined) {
-        return "Invalid search query";
+        return "Invalid search query '" + args + "'";
       }
       return result;
     }
