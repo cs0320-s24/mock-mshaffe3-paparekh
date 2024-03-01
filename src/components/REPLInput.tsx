@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { historyObject } from "./REPLHistory";
 import {
-  badIndex,
+  invalidIndexFailure,
   invalidHeader,
   midMock as starMock,
   noHeaders,
@@ -44,6 +44,7 @@ interface query {
 const mockFiles = new Map<String, String[][]>([
   ["smallCensus.csv", censusMock.data],
   ["stardata.csv", starMock.data],
+  ["noHeadersCensus.csv", noHeaders.data],
 ]);
 
 export function REPLInput(props: REPLInputProps) {
@@ -55,43 +56,52 @@ export function REPLInput(props: REPLInputProps) {
     ["mode", changeMode],
   ]);
 
-  const empty:query = {value: "", identifier:""}
-  const badIndex:query = {value:"Lynn", identifier: "85"}
-  const badHeader:query ={value:"Lynn", identifier:"Pizza"}
-  const successIndex:query = {value: "Lynn", identifier: "1"}
-  const successHeader:query = {value:"Lynn", identifier: "ProperName"}
-  const successNoIdentifier:query ={value:"Lynn", identifier:""}
+  const empty: query = { value: "", identifier: "" };
+  const badIndex: query = { value: "Lynn", identifier: "85" };
+  const badHeader: query = { value: "Lynn", identifier: "Pizza" };
+  const successIndex: query = { value: "Lynn", identifier: "1" };
+  const successHeader: query = { value: "Lynn", identifier: "ProperName" };
+  const successNoIdentifier: query = { value: "Lynn", identifier: "" };
+
+  const queries: query[] = [
+    empty,
+    badIndex,
+    badHeader,
+    successHeader,
+    successIndex,
+    successNoIdentifier,
+  ];
 
   const mockSearchStars = new Map<query, String[][]>([
-  [empty, [[noQuery.failure_reason]]],
-  [badIndex, [[invalidIndexFailure.failure_reason]]],
-  [badHeader, [[invalidHeader.failure_reason]]],
-  [successIndex, searchSuccessIndex.data],
-  [successHeader, searchSuccessHeader.data],
-  [successNoIdentifier, searchSuccessSansIdentify.data],
-]);
-    /**
-     * This REPLFunction handles the "load" command by setting the data variable
-     * to be equal to the mocked data
-     * @param args the command string arguments
-     * @returns Message to be added to REPLHistory
-     */
-    function load(args: Array<String>): string {
-      let filepath = args[1];
-      if (filepath != null) {
-        //try to use mock file map to get data
-        const clone = mockFiles.get(filepath);
-        //if no such filename
-        if (clone !== undefined) {
-          setData(clone);
-        } else {
-          return "Invalid csv name: " + filepath;
-        }
-        return "Loaded: " + filepath;
+    [empty, [[noQuery.failure_reason]]],
+    [badIndex, [[invalidIndexFailure.failure_reason]]],
+    [badHeader, [[invalidHeader.failure_reason]]],
+    [successIndex, searchSuccessIndex.data],
+    [successHeader, searchSuccessHeader.data],
+    [successNoIdentifier, searchSuccessSansIdentify.data],
+  ]);
+  /**
+   * This REPLFunction handles the "load" command by setting the data variable
+   * to be equal to the mocked data
+   * @param args the command string arguments
+   * @returns Message to be added to REPLHistory
+   */
+  function load(args: Array<String>): string {
+    let filepath = args[1];
+    if (filepath != null) {
+      //try to use mock file map to get data
+      const clone = mockFiles.get(filepath);
+      //if no such filename
+      if (clone !== undefined) {
+        setData(clone);
       } else {
-        return "CSV name can't be null";
+        return "Invalid csv name: " + filepath;
       }
-    };
+      return "Loaded: " + filepath;
+    } else {
+      return "CSV name can't be null";
+    }
+  }
 
   /**
    * This helper function turns a 2D array into an HTML table for
@@ -120,10 +130,10 @@ export function REPLInput(props: REPLInputProps) {
    * This REPLFunction handles the "view" command by returning the loaded data
    * @returns A 2D array of the data loaded
    */
-  function view(): String[][] {
+  function view(): String[][] | string {
     //args should be empty?
-    if (data.length == 0) {
-      return [["No CSV data"]];
+    if (data.length <= 1) {
+      return "No CSV data loaded.";
     }
     return data;
   }
@@ -133,19 +143,28 @@ export function REPLInput(props: REPLInputProps) {
    * @param args The command string to be parsed and searched through
    * @returns String[][] representing a successful output or informative error * message
    */
-  function search(args: Array<string>): String[][] {
-    if (data.length === 0) {
-      return [["No CSV data loaded."]];
-    }
-    args.shift();
-    if (data === starMock.data) {
-      const result = mockSearchStars.get(args);
-      if (result === undefined) {
-        return [["Invalid search query"]];
+  function search(args: Array<string>): String[][] | string {
+    if (data.length <= 1) {
+      return "No CSV data loaded.";
+    } else {
+      args.shift();
+      if (args.length < 2) {
+        args[1] = "";
       }
-      return result;
+      let result: String[][] | undefined;
+      if (data === starMock.data) {
+        queries.forEach((val) => {
+          if (args[0] === val.value && args[1] === val.identifier) {
+            result = mockSearchStars.get(val);
+          }
+        });
+        if (result === undefined) {
+          return "Invalid search query: no such mock search: " + args;
+        }
+        return result;
+      }
+      return "Invalid search query. Check that a file is loaded.";
     }
-    return [["Invalid search query"]];
   }
 
   const [commandString, setCommandString] = useState<string>("");

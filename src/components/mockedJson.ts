@@ -281,7 +281,7 @@ export var searchSuccessHeader = {
   response_type: "searchResultSuccess",
   data: [["194", "Lynn", "37.27834", "0.406", "5.56202"]],
   value_query: "Lynn",
-  identifier: "Proper Name",
+  identifier: "ProperName",
 };
 
 export var searchSuccessIndex = {
@@ -291,7 +291,7 @@ export var searchSuccessIndex = {
   identifier: 1,
 };
 
-export var badIndex = {
+export var invalidIndexFailure = {
   value_query: "Lynn",
   identifier: 85,
   response_type: "searchResultFailure",
