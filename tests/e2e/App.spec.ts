@@ -67,15 +67,15 @@ test("basic search functionality for stardata.csv", async ({ page }) => {
   const table = page.locator('div[aria-label="search-table"] table');
   const rows = table.locator("tbody tr");
   // TODO Look
-  await expect(rows).toHaveCount(1);
+  await expect(rows).toHaveCount(0);
 
-  // await page.getByLabel("Command input").click();
-  // await page.getByLabel("Command input").fill("search Lynn ProperName");
-  // await page.getByLabel("Submit").click();
-  // const table = page.locator('div[aria-label="search-table"] table');
-  // const rows = table.locator("tbody tr");
-  // // TODO Look
-  // await expect(rows).toHaveCount(1);
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search Lynn ProperName");
+  await page.getByLabel("Submit").click();
+  const table_2 = page.locator('div[aria-label="search-table"] table');
+  const rows_2 = table.locator("tbody tr");
+  // TODO Look
+  await expect(rows_2).toHaveCount(1);
 
   // await expect(rows.nth(0).locator("td").nth(0)).toHaveText("");
   // const basic_propername_search_output =
