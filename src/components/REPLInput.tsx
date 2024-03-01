@@ -111,8 +111,9 @@ export function REPLInput(props: REPLInputProps) {
    */
   function csvToTable(data: String[][]): JSX.Element {
     let table = (
-      <div>
-        <table>
+      // <div>
+      <table aria-label="search-table">
+        <tbody>
           {data.map((val, key) => (
             <tr key={key}>
               {val.map((elt) => (
@@ -120,8 +121,10 @@ export function REPLInput(props: REPLInputProps) {
               ))}
             </tr>
           ))}
-        </table>
-      </div>
+        </tbody>
+      </table>
+
+      // </div>
     );
     return table;
   }
@@ -227,7 +230,9 @@ export function REPLInput(props: REPLInputProps) {
           ariaLabel={"Command input"}
         />
       </fieldset>
-      <button onClick={handleSubmit}>Submit</button>
+      <button aria-label="Submit" onClick={handleSubmit}>
+        Submit
+      </button>
     </div>
   );
 }

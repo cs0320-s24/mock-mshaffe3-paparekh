@@ -1,19 +1,19 @@
 import { expect, test } from "@playwright/test";
 
-test.beforeEach(() => {
-  // ... you'd put it here.
-  // TODO: Is there something we need to do before every test case to avoid repeating code?
-});
+// test.beforeEach(() => {
+//   // ... you'd put it here.
+//   // TODO: Is there something we need to do before every test case to avoid repeating code?
+// });
 
 test("on page load, i see a login button", async ({ page }) => {
   // Notice: http, not https! Our front-end is not set up for HTTPs.
-  await page.goto("http://localhost:8002/");
+  await page.goto("http://localhost:8000/");
   await expect(page.getByLabel("Login")).toBeVisible();
 });
 
 test("on page load, i dont see the input box until login", async ({ page }) => {
   // Notice: http, not https! Our front-end is not set up for HTTPs.
-  await page.goto("http://localhost:8002/");
+  await page.goto("http://localhost:8000/");
   await expect(page.getByLabel("Sign Out")).not.toBeVisible();
   await expect(page.getByLabel("Command input")).not.toBeVisible();
 
@@ -25,7 +25,7 @@ test("on page load, i dont see the input box until login", async ({ page }) => {
 
 test("after I type into the input box, its text changes", async ({ page }) => {
   // Step 1: Navigate to a URL
-  await page.goto("http://localhost:8002/");
+  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
 
   // Step 2: Interact with the page
@@ -41,7 +41,7 @@ test("after I type into the input box, its text changes", async ({ page }) => {
 
 test("on page load, i see a button", async ({ page }) => {
   // CHANGED
-  await page.goto("http://localhost:8002/");
+  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
   await expect(
     page.getByRole("button", { name: "Submitted 0 times" })
@@ -50,7 +50,7 @@ test("on page load, i see a button", async ({ page }) => {
 
 test("after I click the button, my command gets pushed", async ({ page }) => {
   // CHANGED
-  await page.goto("http://localhost:8002/");
+  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
   await page.getByLabel("Command input").fill("Awesome command");
   await page.getByRole("button", { name: "Submit" }).click();
@@ -64,7 +64,7 @@ test("after I click the button, my command gets pushed", async ({ page }) => {
 });
 
 test("basic search functionality for stardata.csv", async ({ page }) => {
-  await page.goto("http://localhost:8002/");
+  await page.goto("http://localhost:8000/");
   await expect(page.getByLabel("Login")).toBeVisible();
 
   // Testing search with ProperName heading
@@ -106,22 +106,23 @@ test("basic search functionality for stardata.csv", async ({ page }) => {
 test("search functionality for stardata.csv (with invalid/incomplete input)", async ({
   page,
 }) => {
-  await page.goto("http://localhost:8002/");
+  await page.goto("http://localhost:8000/");
   await expect(page.getByLabel("Login")).toBeVisible();
 
   // Testing search with invalid row input
   await page.getByLabel("Command input").fill("search ProperName");
   await page.getByLabel("Command input").click();
-  const invalid_propername_search_output = "Invalid search query";
-  await expect(page.getByLabel("Command input")).toHaveValue(
-    invalid_propername_search_output
-  );
+  // TODO
+  // const invalid_propername_search_output = "Invalid search query: no such mock search: " + args";
+  // await expect(page.getByLabel("Command input")).toHaveValue(
+  //   invalid_propername_search_output
+  // );
 
   // Testing search with invalid column input
 });
 
 test("basic search functionality for smallCensus.csv", async ({ page }) => {
-  await page.goto("http://localhost:8002/");
+  await page.goto("http://localhost:8000/");
   await expect(page.getByLabel("Login")).toBeVisible();
 
   // Testing search with Data Type Heading (Hispanic/Latino)

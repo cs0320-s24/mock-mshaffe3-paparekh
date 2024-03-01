@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "tests2/testing/App.spec.ts"  ]
 }
