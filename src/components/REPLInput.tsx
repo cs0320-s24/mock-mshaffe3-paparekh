@@ -62,7 +62,7 @@ export function REPLInput(props: REPLInputProps) {
   const badHeader: query = { value: "Lynn", identifier: "Pizza" };
   const successIndex: query = { value: "Lynn", identifier: "1" };
   const successHeader: query = { value: "Lynn", identifier: "ProperName" };
-  const successNoIdentifier: query = { value: "Lynn", identifier: "" };
+  const successNoIdentifier: query = { value: "Lynn", identifier: " " };
   const successNoHeaders: query = { value: "Multiracial", identifier: " " };
   const successNoHeadersIndex: query = {
     value: "Multiracial",
@@ -173,7 +173,7 @@ export function REPLInput(props: REPLInputProps) {
       });
       //if not found
       if (result === undefined) {
-        return "Invalid search query";
+        return "Invalid search query '" + args + "'";
       }
       return result;
     }
