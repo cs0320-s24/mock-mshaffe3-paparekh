@@ -90,7 +90,7 @@ export function REPLInput(props: REPLInputProps) {
     [successNoHeaders, searchNoHeaders.data],
     [successNoHeadersIndex, searchNoHeadersIndex.data],
   ]);
-  
+
   /**
    * This REPLFunction handles the "load" command by setting the data variable
    * to be equal to the mocked data

@@ -21,7 +21,7 @@ In terms of data structures, we used several Maps to store the CSV information. 
 After extensively testing the program (both manually and with the Playwright tests), we have found no bugs. Furthermore, there are no checkstyle errors as well.
 
 # Tests
-
+# TODO: Add more regarding each test
 Because the Mock project was concerned with creating front-end components, Playwright tests were used to test the functionality of the program.
 
 # How to

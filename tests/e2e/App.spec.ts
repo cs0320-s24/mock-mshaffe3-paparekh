@@ -8,18 +8,7 @@ import { expect, test } from "@playwright/test";
   Look for this pattern in the tests below!
  */
 
-// If you needed to do something before every test case...
-test.beforeEach(() => {
-  // ... you'd put it here.
-  // TODO: Is there something we need to do before every test case to avoid repeating code?
-});
 
-/**
- * Don't worry about the "async" yet. We'll cover it in more detail
- * for the next sprint. For now, just think about "await" as something
- * you put before parts of your test that might take time to run,
- * like any interaction with the page.
- */
 test("on page load, i see a login button", async ({ page }) => {
   // Notice: http, not https! Our front-end is not set up for HTTPs.
   await page.goto("http://localhost:8000/");
@@ -66,93 +55,221 @@ test("load command creates an empty result (invalid file)", async ({
   );
   // Testing search with ProperName heading
   await page.getByLabel("Submit").click();
-
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("view");
   await page.getByLabel("Submit").click();
   const table = page.locator('div[className="repl-history"] table');
   const rows = table.locator("tbody tr");
-  // await expect(rows).toHaveCount(0);
-  // await expect(rows.nth(0).locator("td").nth(0)).toHaveText(
-  //   "No such filename found"
-  // );
-  const output = await page
-    .locator('div[className="repl-history"] table')
-    .innerText();
-  expect(output).toBe("");
-  // table className="history-table"
 });
 
-// TODO change
-test("basic search functionality for stardata.csv", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
+test("view functionality (table generation) for stardata.csv", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:8006/");
   await page.getByLabel("Login").click();
-  await page.getByLabel("Command input").click();
-  await page.getByLabel("Command input").fill("load stardata.csv");
-  await expect(page.getByLabel("Command input")).toHaveValue(
-    "load stardata.csv"
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("load stardata.csv");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("view");
+  await page.getByLabel("Submit").click();
+
+  // Checking the contents of various cells
+  await expect(page.getByRole("cell", { name: "Bailee" })).toHaveText("Bailee");
+  await expect(page.getByRole("cell", { name: "191", exact: true })).toHaveText(
+    "191"
   );
-  // Testing search with ProperName heading
+  await expect(page.getByRole("cell", { name: "Lynn" })).toHaveText("Lynn");
+});
+
+test("view functionality (table generation) for censusdata.csv", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:8006/");
+  await page.getByLabel("Login").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page
+    .getByPlaceholder("Enter command here!")
+    .fill("load censusdata.csv");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("view");
   await page.getByLabel("Submit").click();
 
-  await page.getByLabel("Command input").click();
-  await page.getByLabel("Command input").fill("view");
+  // Checking the contents of various cells
+  await expect(page.getByRole("cell", { name: "Black" })).toHaveText("Black");
+  await expect(
+    page.getByRole("cell", { name: "Native American/American" })
+  ).toHaveText("Native American/American Indian");
+  await expect(page.getByRole("cell", { name: "0%" })).toHaveText("0%");
+  // Testing header content
+  await expect(
+    page.getByRole("cell", { name: "Average Weekly Earnings" })
+  ).toHaveText("Average Weekly Earnings");
+  await expect(page.getByRole("cell", { name: "Data Type" })).toHaveText(
+    "Data Type"
+  );
+});
+
+test("view functionality (table generation) for noHeaders.csv", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:8006/");
+  await page.getByLabel("Login").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("load noHeaders.csv");
   await page.getByLabel("Submit").click();
-  const table = page.locator('div[className="repl-history"] table');
-  const rows = table.locator("tbody tr");
-  // TODO Look
-  await expect(rows).toHaveCount(0);
-
-  await page.getByLabel("Command input").click();
-  await page.getByLabel("Command input").fill("search ProperName Lynn");
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("view");
   await page.getByLabel("Submit").click();
-  const table_2 = page.locator('div[aria-label="search-table"] table');
-  const rows_2 = table.locator("tbody tr");
-  // TODO Look
-  // await expect(rows_2).toHaveCount(1);
 
-  // await expect(rows.nth(0).locator("td").nth(0)).toHaveText("");
-  // const basic_propername_search_output =
-  //   '"5", "Zita", "264.58918", "0.04601", "-226.71007"';
-  // await expect(page.getByLabel("Command input")).toHaveValue(
-  //   basic_propername_search_output
-  // );
-
-  // // Testing search with X heading
-  // await page.getByLabel("Command input").fill("search X 0");
-  // await page.getByLabel("Command input").click();
-  // const basic_x_search_output = '"0", "Sol", "0", "0", "0"';
-  // await expect(page.getByLabel("Command input")).toHaveValue(
-  //   basic_x_search_output
-  // );
-
-  // // Testing search with StarID heading
-  // await page.getByLabel("Command input").fill("search StarID 134");
-  // await page.getByLabel("Command input").click();
-  // const basic_starid_search_output =
-  //   '"134", "Koda", "769.05734", "5.70658", "-15.30381"';
-  // await expect(page.getByLabel("Command input")).toHaveValue(
-  //   basic_starid_search_output
-  // );
-
-  // // Testing search with Z heading
-  // await page.getByLabel("Command input").fill("search Z -300.85302");
-  // await page.getByLabel("Command input").click();
-  // const basic_z_search_output =
-  //   '"132", "Sheron", "435.2293", "3.20568", "-300.85302"';
-  // await expect(page.getByLabel("Command input")).toHaveValue(
-  //   basic_z_search_output
-  // );
+  // Checking the contents of various cells
+  await expect(page.getByRole("cell", { name: "Black" })).toHaveText("Black");
+  await expect(
+    page.getByRole("cell", { name: "Native American/American" })
+  ).toHaveText("Native American/American Indian");
+  await expect(page.getByRole("cell", { name: "0%" })).toHaveText("0%");
 });
 
-test("on page load, i see a button", async ({ page }) => {
-  // TODO WITH TA: Fill this in!
+test("valid search commands for stardata.csv, censusdata.csv, noHeaders.csv/loading multiple files at the same time", async ({
+  page,
+}) => {
+  // Testing search for stardata.csv
+  await page.goto("http://localhost:8006/");
+  await page.getByLabel("Login").click();
+
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("load stardata.csv");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("view");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  // Entering full column name
+  await page
+    .getByPlaceholder("Enter command here!")
+    .fill("search ProperName Lynn");
+  await page.getByLabel("Submit").click();
+  await expect(page.getByRole("table").nth(3)).toBeVisible();
+  await expect(page.getByRole("cell", { name: "Lynn" }).nth(1)).toHaveText(
+    "Lynn"
+  );
+  await expect(page.getByRole("cell", { name: "194" }).nth(4)).toHaveText(
+    "194"
+  );
+  // Entering column name by index
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("search 1 Lynn");
+  await page.getByLabel("Submit").click();
+  await expect(page.getByRole("cell", { name: "Lynn" }).nth(2)).toHaveText(
+    "Lynn"
+  );
+  await expect(page.getByRole("cell", { name: "5.56202" }).nth(2)).toHaveText(
+    "5.56202"
+  );
+
+  // Testing search for noHeaders.csv
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("load noHeaders.csv");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("view");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page
+    .getByPlaceholder("Enter command here!")
+    .fill("search 1 Multiracial");
+  await page.getByLabel("Submit").click();
+  await expect(
+    page.getByRole("cell", { name: "Multiracial" }).nth(1)
+  ).toHaveText("Multiracial");
+
+  await expect(
+    page.getByRole("cell", { name: "8883.049171" }).nth(1)
+  ).toHaveText("8883.049171");
+  await page.getByPlaceholder("Enter command here!").fill("search Multiracial");
+  await page.getByLabel("Submit").click();
+  await expect(page.getByRole("cell", { name: "$971.89" }).nth(2)).toHaveText(
+    "$971.89"
+  );
+
+  // Searching a different CSV to check loaded files at the same time
+  await expect(page.getByRole("cell", { name: "Lynn" }).nth(1)).toHaveText(
+    "Lynn"
+  );
 });
 
-test("after I click the button, its label increments", async ({ page }) => {
-  // TODO WITH TA: Fill this in to test your button counter functionality!
+test("mode switching to verbose", async ({
+  page,
+}) => {
+  // Testing search for stardata.csv
+  await page.goto("http://localhost:8006/");
+  await page.getByLabel("Login").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("load stardata.csv");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("mode");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("view");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page
+    .getByPlaceholder("Enter command here!")
+    .fill("search ProperName Lynn");
+  await page.getByLabel("Submit").click();
+
+  await expect(page.getByRole("cell", { name: "Command" }).first()).toHaveText("Command");
+  await expect(page.getByRole("cell", { name: "Mode changed to verbose" })).toHaveText("Mode changed to verbose");
+  await expect(page.getByRole("cell", { name: "Output" }).nth(2)).toHaveText("Output");
 });
 
-test("after I click the button, my command gets pushed", async ({ page }) => {
-  // TODO: Fill this in to test your button push functionality!
+test("different types of invalid inputs/commands", async ({ page }) => {
+  // Testing search for stardata.csv
+  await page.goto("http://localhost:8006/");
+  await page.getByLabel("Login").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("load wrong.csv");
+  await page.getByLabel("Submit").click();
+  await expect(page.getByText("No such filename found")).toHaveText("No such filename found");
+  await page.getByPlaceholder("Enter command here!").fill("viewww");
+  await page.getByLabel("Submit").click();
+  await expect(page.getByText("Bad command.")).toHaveText("Bad command.");
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("load stardata.csv");
+  await page.getByLabel("Submit").click();
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("search CS32 Class");
+  await page.getByLabel("Submit").click();
+  await expect(page.getByText("Invalid search query 'CS32,")).toHaveText(
+    "Invalid search query 'CS32,Class'"
+  );
+  await page.getByPlaceholder("Enter command here!").click();
+  await page
+    .getByPlaceholder("Enter command here!")
+    .fill("search ProperName Brown");
+  await page.getByLabel("Submit").click();
+  await expect(
+    page.getByText("Invalid search query 'ProperName,Brown'")
+  ).toHaveText("Invalid search query 'ProperName,Brown'");
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("search 85 Lynn");
+  await page.getByLabel("Submit").click();
+  await expect(
+    page.getByRole("cell", { name: "Column index doesn't exist" })
+  ).toHaveText("Column index doesn't exist");
+  await page.getByPlaceholder("Enter command here!").click();
+  await page.getByPlaceholder("Enter command here!").fill("search");
+  await page.getByLabel("Submit").click();
+  await expect(
+    page.getByRole("cell", { name: "no search query provided" })
+  ).toHaveText("no search query provided");
+  await page.getByPlaceholder('Enter command here!').click();
+  await page.getByPlaceholder('Enter command here!').fill('search Pizza Lynn');
+  await page.getByLabel('Submit').click();
+  await expect(
+    page.locator("table").filter({ hasText: "Header doesn't exist" }).first()
+  ).toHaveText("Header doesn't exist");
 });
+

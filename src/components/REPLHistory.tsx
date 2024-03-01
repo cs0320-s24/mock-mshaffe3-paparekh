@@ -24,7 +24,7 @@ export function REPLHistory(props: REPLHistoryProps) {
     return (
       <div className="repl-history">
         {props.history.map((output, key) => (
-          <table className="history-table">
+          <table aria-label="history-table">
             <tbody>
               <tr key={key}>
                 <td>{"Command"}</td>
