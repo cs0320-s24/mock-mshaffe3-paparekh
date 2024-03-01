@@ -14,14 +14,16 @@ Github repo link: https://github.com/cs0320-s24/mock-mshaffe3-paparekh/commits/m
 
 With respect to interfaces, we use the REPLInputProps interface which was created in REPLInput.tsx. This allows us to describe the properties passed in to REPLInput/the shared states between the mode and history. For instance, it includes history, setHistory, mode, and setMode. The REPLInputProps interface is then used in the REPLInput function which handles the various commands such as load, view, search, etc; essentially, the interface provides the necessary data for the REPL functionality. Furthermore, in REPLInput.tsx, we created a interface for the query that holds the value and identifier (both as strings). The query allows for different cases such as being empty, badIndex, badHeader, successIndex, etc. In ControlledInput.tsx, we also use another interface called ControlledInputProps which is then used by the ControlledInput function to manage the states in React. Our REPLHistory.tsx also contained a REPLHistoryProps and historyObject interface for creating a HTML table representing a CSV data in a readable format.
 
-In terms of data structures, we used several Maps to store the CSV information. For example, we created a String -> String[][] Map that held the mockFiles (censusdata.csv, stardata.csv, and noHeaders.csv). We also created a command_map, mapping a String to a REPLFunction—which corresponded to the REPL commands (load, view, search, and mode). Lastly, another Map was used for query -> String[][] for storing the various mock searches. Maps helped us tremendously with effectively storing and retrieving information such as commands and the CSV functionalities.
+In terms of data structures, we used several Maps to store the CSV information. For example, we created a String -> String[][] Map that held the mockFiles (censusdata.csv, stardata.csv, and noHeaders.csv). We also created a command_map, mapping a String to a REPLFunction—which corresponded to the REPL commands (load, view, search, and mode). The REPL functions also allowed us to fulfill user story 6 and made extensibility more effective for developer stakeholders. Lastly, another Map was used for query -> String[][] for storing the various mock searches. Maps helped us tremendously with effectively storing and retrieving information such as commands and the CSV functionalities.
 
 # Errors/Bugs
 
 After extensively testing the program (both manually and with the Playwright tests), we have found no bugs. Furthermore, there are no checkstyle errors as well.
 
 # Tests
+
 # TODO: Add more regarding each test
+
 Because the Mock project was concerned with creating front-end components, Playwright tests were used to test the functionality of the program.
 
 # How to
@@ -39,10 +41,13 @@ Build/run the program:
 4. Now, the user can enter the following commands
    - mode: to switch between verbose or brief modes
    - load <csv file>: to load a particular CSV
-   - view: to view a CSV file in a formatted table
-   - search <column> <value>: to search for a <value> item in the <column> specified
-5. After enter a command, click Submit to input the command in the REPL
+     - ("stardata.csv", "censusdata.csv", and "noHeaders.csv") are valid options for this mocked project
+   - view: to view a CSV file in a formatted table. If no CSV is loaded, it should display an error message response.
+   - search <column> <value>: to search for a <value> item in the <column> specified. <column> can be a numerical index or a column header name.
+     - You can also input just a value without an identifier.
+     - If no CSV is loaded, it should display an error message response
+5. After enter a command, click Submit to input the command in the REPL.
 
 # Collaboration
 
-Besides attending collab hours, no outside collaboration was conducted.
+Besides attending collab section and conceptual hours, no outside collaboration was conducted.
