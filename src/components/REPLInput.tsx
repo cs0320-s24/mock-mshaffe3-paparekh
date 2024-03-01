@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { historyObject } from "./REPLHistory";
 import {
-  badIndex,
+  invalidIndexFailure,
   invalidHeader,
   midMock as starMock,
   noHeaders,
@@ -34,6 +34,10 @@ export interface REPLFunction {
   (args: Array<string>): String[][] | string;
 }
 
+interface query {
+  value: string;
+  identifier: string;
+}
 /*
  * This maps file names to mock JSON files for front-end testing purposes
  */
@@ -41,18 +45,6 @@ const mockFiles = new Map<String, String[][]>([
   ["smallCensus.csv", censusMock.data],
   ["stardata.csv", starMock.data],
   ["noHeadersCensus.csv", noHeaders.data],
-]);
-
-/**
- * This won't work because hashcode of array... how can we store the query differently?
- */
-const mockSearchStars = new Map<String[], String[][]>([
-  [[], [[noQuery.failure_reason]]],
-  [["Lynn", "85"], [[badIndex.failure_reason]]],
-  [["Lynn", "Pizza"], [[invalidHeader.failure_reason]]],
-  [["Lynn", "1"], searchSuccessIndex.data],
-  [["Lynn", "ProperName"], searchSuccessHeader.data],
-  [["Lynn"], searchSuccessSansIdentify.data],
 ]);
 
 export function REPLInput(props: REPLInputProps) {
@@ -64,6 +56,30 @@ export function REPLInput(props: REPLInputProps) {
     ["mode", changeMode],
   ]);
 
+  const empty: query = { value: "", identifier: "" };
+  const badIndex: query = { value: "Lynn", identifier: "85" };
+  const badHeader: query = { value: "Lynn", identifier: "Pizza" };
+  const successIndex: query = { value: "Lynn", identifier: "1" };
+  const successHeader: query = { value: "Lynn", identifier: "ProperName" };
+  const successNoIdentifier: query = { value: "Lynn", identifier: "" };
+
+  const queries: query[] = [
+    empty,
+    badIndex,
+    badHeader,
+    successHeader,
+    successIndex,
+    successNoIdentifier,
+  ];
+
+  const mockSearchStars = new Map<query, String[][]>([
+    [empty, [[noQuery.failure_reason]]],
+    [badIndex, [[invalidIndexFailure.failure_reason]]],
+    [badHeader, [[invalidHeader.failure_reason]]],
+    [successIndex, searchSuccessIndex.data],
+    [successHeader, searchSuccessHeader.data],
+    [successNoIdentifier, searchSuccessSansIdentify.data],
+  ]);
   /**
    * This REPLFunction handles the "load" command by setting the data variable
    * to be equal to the mocked data
@@ -114,10 +130,10 @@ export function REPLInput(props: REPLInputProps) {
    * This REPLFunction handles the "view" command by returning the loaded data
    * @returns A 2D array of the data loaded
    */
-  function view(): String[][] {
+  function view(): String[][] | string {
     //args should be empty?
-    if (data.length == 0) {
-      return [["No CSV data"]];
+    if (data.length <= 1) {
+      return "No CSV data loaded.";
     }
     return data;
   }
@@ -127,19 +143,28 @@ export function REPLInput(props: REPLInputProps) {
    * @param args The command string to be parsed and searched through
    * @returns String[][] representing a successful output or informative error * message
    */
-  function search(args: Array<string>): String[][] {
-    if (data.length === 0) {
-      return [["No CSV data loaded."]];
-    }
-    args.shift();
-    if (data === starMock.data) {
-      const result = mockSearchStars.get(["Lynn"]);
-      if (result === undefined) {
-        return [["Invalid search query: no such mock search" + args]];
+  function search(args: Array<string>): String[][] | string {
+    if (data.length <= 1) {
+      return "No CSV data loaded.";
+    } else {
+      args.shift();
+      if (args.length < 2) {
+        args[1] = "";
       }
-      return result;
+      let result: String[][] | undefined;
+      if (data === starMock.data) {
+        queries.forEach((val) => {
+          if (args[0] === val.value && args[1] === val.identifier) {
+            result = mockSearchStars.get(val);
+          }
+        });
+        if (result === undefined) {
+          return "Invalid search query: no such mock search: " + args;
+        }
+        return result;
+      }
+      return "Invalid search query. Check that a file is loaded.";
     }
-    return [["Invalid search query: not correct file"]];
   }
 
   const [commandString, setCommandString] = useState<string>("");

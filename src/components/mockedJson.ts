@@ -291,7 +291,7 @@ export var searchSuccessIndex = {
   identifier: 1,
 };
 
-export var badIndex = {
+export var invalidIndexFailure = {
   value_query: "Lynn",
   identifier: 85,
   response_type: "searchResultFailure",
