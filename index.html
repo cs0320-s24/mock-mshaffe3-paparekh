@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<!-- 
+    This is a reasonable starting point for the HTML in Mock.
+    Feel free to modify this as you wish.
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mock</title>
+    <link rel="stylesheet" href="src/styles/main.css" type="text/css" />
+  </head>
+  <body>
+    <noscript>This example requires JavaScript to run.</noscript>
+
+    <div id="root"></div>
+    <script type="module" src="src/index.tsx"></script>
+  </body>
+
+  <script src="URL"></script>
+  <script>
+    function arrayToTable(tableData) {
+      var table = $("<table></table>");
+      $(tableData).each(function (i, rowData) {
+        var row = $("<tr></tr>");
+        $(rowData).each(function (j, cellData) {
+          row.append($("<td>" + cellData + "</td>"));
+        });
+        table.append(row);
+      });
+      return table;
+    }
+
+    $.ajax({
+      type: "GET",
+      url: "URL",
+      success: function (data) {
+        $("body").append(arrayToTable(Papa.parse(data).data));
+      },
+    });
+  </script>
+</html>

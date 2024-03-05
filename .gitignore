@@ -1,6 +1,10 @@
-mock/node_modules/
-mock/src/*.js
+src/*.js
 .DS_Store
-mock/test-results/
-mock/playwright-report/
-mock/playwright/.cache/
+test-results/
+playwright-report/
+playwright/.cache/
+node_modules
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
